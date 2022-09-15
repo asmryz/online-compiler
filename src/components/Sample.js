@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, Fragment } from "react";
 //import ReactDOM from "react-dom";
 
 import Container from "@material-ui/core/Container";
@@ -18,41 +18,61 @@ const LINE_HEIGHT = 20;
 // });
 
 const Sample = () => {
-    const [height, setHeight] = useState(325);
+    const [height, setHeight] = useState(180);
     const valueGetter = useRef();
 
     const handleEditorChange = useCallback(_ => {
-        const countOfLines = valueGetter.current().split("\n").length;
-        console.log(`countOfLines >> ${countOfLines}`)
-        if (countOfLines >= MIN_COUNT_OF_LINES) {
-            const currentHeight = countOfLines * LINE_HEIGHT;
-            if (MAX_HEIGHT > currentHeight) {
-                setHeight(currentHeight);
-            }
-        }
+        //const countOfLines = valueGetter.current().split("\n").length;
+        console.dir(valueGetter.current)
+        // if (countOfLines >= MIN_COUNT_OF_LINES) {
+        //     const currentHeight = countOfLines * LINE_HEIGHT;
+        //     if (MAX_HEIGHT > currentHeight) {
+        //         setHeight(currentHeight);
+        //     }
+        // }
     }, []);
 
     const handleEditorDidMount = useCallback(
-        (_valueGetter, editor) => {
-            valueGetter.current = _valueGetter;
+        (editor, monaco) => {
+
+            valueGetter.current = monaco;
+
             editor.onDidChangeModelContent(handleEditorChange);
-            console.log(`countOfLines >> ${valueGetter.current().split("\n").length}`)
+            console.dir(editor.getModel().getValue().split("\n").length * 2 * 10)
+            setHeight(editor.getModel().getValue().split("\n").length * 2 * 10);
         },
         [handleEditorChange]
     );
 
+    const handleHeiht = (editor) => {
+
+    }
+
     return (
-        // <Container>
-        //     <Paper>
-        <Editor
-            height={height}
-            editorDidMount={handleEditorDidMount}
-            language="python"
-            value={examples.python}
-            scrollBeyondLastLine='false'
-        />
-        //     </Paper>
-        // </Container>
+        <Fragment>
+            <Container>
+                {Object.entries(examples).map(([key, value], i) =>
+
+                    <Paper key={i}>
+                        <Editor
+                            height={value.split("\n").length * 2 * 10}
+                            onMount={handleEditorDidMount}
+                            language={key}
+                            value={value}
+                            scrollBeyondLastLine='false'
+                            options={{
+                                readOnly: false,
+                                minimap: { enabled: false },
+                                scrollbars: false,
+                            }}
+                        />
+
+                    </Paper>
+
+                )}
+
+            </Container>
+        </Fragment>
     );
 }
 

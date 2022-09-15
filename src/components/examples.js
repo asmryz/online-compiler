@@ -12,6 +12,7 @@ const examples = {
     const str2hex = str => buf2hex(str2buf(str));
     
     export default str2hex;  
+    
   `),
     python: rTabs(`
     # Python program to check if the number provided by the user is an Armstrong number or not
