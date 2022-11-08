@@ -1,6 +1,6 @@
-import React, { useRef } from 'react'
-import Editor from '@monaco-editor/react';
-import Term from './Term';
+import React, { useRef } from "react";
+import Editor from "@monaco-editor/react";
+import Term from "./Term";
 
 const IDE = () => {
     const editorRef = useRef(null);
@@ -15,7 +15,7 @@ const IDE = () => {
 
     return (
         <>
-            <button onClick={showValue}>Show value</button>
+            {/* <button onClick={showValue}>Show value</button>
             <Editor
                 height="90vh"
                 defaultLanguage="c"
@@ -26,9 +26,9 @@ const IDE = () => {
                     minimap: { enabled: false },
                     scrollbars: false,
                 }}
-            />
+            /> */}
             <Term />
         </>
     );
-}
+};
 export default IDE;
