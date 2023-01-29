@@ -5,7 +5,7 @@ import "xterm/dist/xterm.css";
 import * as fit from "xterm/lib/addons/fit/fit";
 //import { FitAddon } from "xterm-addon-fit";
 
-const Term = ({ cols, rows, created }) => {
+const Term = ({ cols, rows, created, filename, execute }) => {
     const terminal = new Terminal({ cols, rows });
     const termRef = useRef();
     window.terminal = terminal;
@@ -14,11 +14,20 @@ const Term = ({ cols, rows, created }) => {
 
     const getTerm = async () => {
         Terminal.applyAddon(fit);
+        console.log(
+            `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}:${new Date().getMilliseconds()}`
+        );
         console.log(`getTerm`);
-        await fetch(`http://localhost:5000/terminals?cols=${terminal.cols}&rows=${terminal.rows}&pid=${pid}`, {
-            method: "POST",
-        }).then((res) =>
+        await fetch(
+            `http://localhost:5000/terminals?cols=${terminal.cols}&rows=${terminal.rows}&pid=${pid}&src=${filename}`,
+            {
+                method: "POST",
+            }
+        ).then((res) =>
             res.text().then((pid) => {
+                console.log(
+                    `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}:${new Date().getMilliseconds()}`
+                );
                 console.log(`pid >> ${pid}`);
                 setPid(pid);
                 sessionStorage.setItem("pid", pid);
@@ -31,17 +40,10 @@ const Term = ({ cols, rows, created }) => {
     };
 
     useEffect(() => {
-        //setPid(sessionStorage.getItem("pid"));
-        if (!created) {
-            (async () => {
-                await getTerm();
-            })();
-        } else {
-            terminal.loadAddon(new AttachAddon(new WebSocket(`ws://localhost:5000/terminals/${pid}`)));
-            terminal.open(termRef.current);
-            terminal.write("/ # ");
-        }
-    }, []);
+        (async () => {
+            await getTerm();
+        })();
+    }, [execute]);
 
     return <div ref={termRef} id="terminal-container" />;
 };

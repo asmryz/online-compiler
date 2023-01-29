@@ -1,14 +1,16 @@
 "use strict";
 exports.__esModule = true;
 var express = require("express");
+const fs = require("fs");
 var pty = require("node-pty");
 var app = express();
 var expressWs = require("express-ws")(app);
 // Serve static assets from ./static
+app.use(express.json());
 app.use(express.static(__dirname + "/static"));
 
 var terminals = {};
-
+var args = [];
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -18,21 +20,7 @@ app.use(function(req, res, next) {
 // Instantiate shell and set up data handlers
 expressWs.app.ws("/terminals/:pid", function(ws, req) {
     var term = terminals[parseInt(req.params.pid)];
-    // Spawn the shell
-    // Compliments of http://krasimirtsonev.com/blog/article/meet-evala-your-terminal-in-the-browser-extension
-    // var term = pty.spawn('/bin/bash', [], {
-    //     name: 'xterm-color',
-    //     cwd: process.env.PWD,
-    //     env: process.env
-    // });
 
-    // console.log('Created terminal with PID: ' + term.pid);
-    // terminals[term.pid] = term;
-
-    // res.send(term.pid.toString());
-    // res.end();
-
-    // For all shell data send it to the websocket
     term.on("data", function(data) {
         ws.send(data);
     });
@@ -42,21 +30,59 @@ expressWs.app.ws("/terminals/:pid", function(ws, req) {
     });
 });
 
-app.post("/terminals", function(req, res) {
+app.post("/save", (req, res) => {
+    console.log(`first`);
+    console.log(req.body);
+    const outputPath = "/home/asmryz/git/C/";
+    const { src, extention, filename } = req.body;
+    // code that generates names and content
+
+    const currentFile = `${outputPath}${filename}${extention}`;
+    //const content = "...";
+    fs.promises.writeFile(currentFile, src, "utf8");
+    res.send("saved");
+});
+
+//docker run -itd --rm --name c-compiler gcc /bin/bash
+app.post("/terminals", async function(req, res) {
+    console.log(
+        `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}:${new Date().getMilliseconds()}`
+    );
+
     console.log(req.query);
-    var cols = parseInt(req.query.cols),
-        rows = parseInt(req.query.rows),
-        //term = spawn("docker", ["exec", "-ti", "9251", "/bin/sh"], {
-        //term = spawn("docker", ["exec", "-ti", "9251", "/bin/sh"], {
-        term = pty.spawn("docker", ["exec", "-it", "fd73", "ash"], {
-            name: "xterm-color",
-            cols: cols || 80,
-            rows: rows || 24,
-            cwd: process.env.PWD,
-            env: process.env,
-        });
+    console.log(` src >> ${req.query.src}`);
+    //let args = ["exec", "-ti", "c-compiler", "bash", "-c", "gcc -o second second.c && ./second"];
+
+    args = [
+        "run",
+        "--rm",
+        "-it",
+        "-v",
+        "/home/asmryz/git/C:/usr/src/myapp",
+        "-w",
+        "/usr/src/myapp",
+        "gcc:4.9",
+        "bash",
+        "-c",
+        //`gcc -o second second.c && ./second`,
+        `gcc -o ${req.query.src} ${req.query.src}.c && ./${req.query.src}`,
+    ];
+    var cols = parseInt(req.query.cols);
+    var rows = parseInt(req.query.rows);
+
+    var term = pty.spawn("docker", args, {
+        //term = pty.spawn("docker", args, {
+        name: "xterm-color",
+        cols: cols || 80,
+        rows: rows || 24,
+        cwd: process.env.PWD,
+        env: process.env,
+    });
     //term.write("ls\r");
     console.log("Created terminal with PID: " + term.pid);
+    console.log(
+        `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}:${new Date().getMilliseconds()}`
+    );
     terminals[term.pid] = term;
 
     res.send(term.pid.toString());
