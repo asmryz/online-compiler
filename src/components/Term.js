@@ -6,7 +6,15 @@ import * as fit from "xterm/lib/addons/fit/fit";
 //import { FitAddon } from "xterm-addon-fit";
 
 const Term = ({ cols, rows, created, filename, execute }) => {
-    const terminal = new Terminal({ cols, rows });
+    const terminal = new Terminal({
+        cols,
+        rows,
+        theme: {
+            background: "#0000AA",
+            //foreground: "#000000",
+            //cursor: "#000000",
+        },
+    });
     const termRef = useRef();
     window.terminal = terminal;
     console.log(`cols >> ${cols}`);

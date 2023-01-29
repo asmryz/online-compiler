@@ -69,7 +69,8 @@ const IDE = ({ item }) => {
                     scrollbars: false,
                 }}
             />
-            <div style={{ width: 760, height: 200, backgroundColor: "black" }}>
+            output:
+            <div style={{ width: 760, height: 200, backgroundColor: "#0000AA" }}>
                 {execute !== 0 ? <Term cols={80} rows={10} filename={item.filename} execute={execute} /> : null}
             </div>
         </Paper>
