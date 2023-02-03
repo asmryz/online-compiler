@@ -2,6 +2,8 @@
 exports.__esModule = true;
 var express = require("express");
 const fs = require("fs");
+const path = require("path");
+const dotenv = require("dotenv").config();
 var pty = require("node-pty");
 var app = express();
 var expressWs = require("express-ws")(app);
@@ -15,6 +17,12 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
+});
+
+app.use(express.static(path.join(__dirname, "build")));
+
+app.get("/", function(req, res) {
+    res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 // Instantiate shell and set up data handlers
@@ -101,5 +109,7 @@ app.post("/terminals/:pid/size", function(req, res) {
     res.status(200).send(pid);
     res.end();
 });
+const port = process.env.PORT || 8000;
+const host = process.env.HOST || "localhost";
 // Start the application
-app.listen(5000, () => console.log(`Server is listening on https://localhost:5000`));
+app.listen(port, () => console.log(`Server is listening on http://${host}:${port}`));

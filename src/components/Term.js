@@ -15,23 +15,24 @@ const Term = ({ cols, rows, created, filename, execute }) => {
             //cursor: "#000000",
         },
     });
+    let URL = `http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}`;
     const termRef = useRef();
     window.terminal = terminal;
     console.log(`cols >> ${cols}`);
     const [pid, setPid] = useState(sessionStorage.getItem("pid") || -1);
+
+    console.log(`PORT >> ${process.env.PORT}`);
 
     const getTerm = async () => {
         Terminal.applyAddon(fit);
         console.log(
             `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}:${new Date().getMilliseconds()}`
         );
+
         console.log(`getTerm`);
-        await fetch(
-            `http://localhost:5000/terminals?cols=${terminal.cols}&rows=${terminal.rows}&pid=${pid}&src=${filename}`,
-            {
-                method: "POST",
-            }
-        ).then((res) =>
+        await fetch(`${URL}/terminals?cols=${terminal.cols}&rows=${terminal.rows}&pid=${pid}&src=${filename}`, {
+            method: "POST",
+        }).then((res) =>
             res.text().then((pid) => {
                 console.log(
                     `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}:${new Date().getMilliseconds()}`
@@ -40,7 +41,13 @@ const Term = ({ cols, rows, created, filename, execute }) => {
                 setPid(pid);
                 sessionStorage.setItem("pid", pid);
 
-                terminal.loadAddon(new AttachAddon(new WebSocket(`ws://localhost:5000/terminals/${pid}`)));
+                terminal.loadAddon(
+                    new AttachAddon(
+                        new WebSocket(
+                            `ws://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/terminals/${pid}`
+                        )
+                    )
+                );
                 terminal.open(termRef.current);
                 //console.log(termRef.current.offsetWidth);
             })
