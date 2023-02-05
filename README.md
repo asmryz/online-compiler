@@ -11,7 +11,7 @@ git clone -b live-compiler https://github.com/asmryz/online-compiler.git
 Then run the following commands one by one:
 
 ```bash
-cd express-react-template
+cd online-compiler
 npm i
 ```
 
