@@ -10,10 +10,11 @@ const Term = ({ cols, rows, created, filename, execute }) => {
     const terminal = new Terminal({
         cols,
         rows,
+        cursorBlink: true,
         theme: {
-            background: "#0000AA",
-            //foreground: "#000000",
-            //cursor: "#000000",
+            background: "#f5f5f5",
+            foreground: "#000000",
+            cursor: "#000000",
         },
     });
     //let URL = `http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}`;

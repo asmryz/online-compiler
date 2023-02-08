@@ -32,9 +32,9 @@ int main()
 int main()
 {
 
-int a;
-printf("Enter any number for a: ");
-scanf("%d", &a);
+    int a;
+    printf("Enter any number for a: ");
+    scanf("%d", &a);
     // prints hello world
     printf("This is second %d\\n", a);
 

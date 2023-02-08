@@ -68,8 +68,8 @@ const IDE = ({ item }) => {
                 }}
             />
             output:
-            <div style={{ width: 760, height: 200, backgroundColor: "#0000AA" }}>
-                {execute !== 0 ? <Term cols={80} rows={11} filename={item.filename} execute={execute} /> : null}
+            <div style={{ width: 1162, height: 200, backgroundColor: "#f5f5f5" }}>
+                {execute !== 0 ? <Term cols={132} rows={11} filename={item.filename} execute={execute} /> : null}
             </div>
         </Paper>
     );
