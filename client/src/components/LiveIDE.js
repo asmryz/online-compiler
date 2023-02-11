@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 //import ReactDOM from "react-dom";
 
 import Container from "@material-ui/core/Container";
@@ -7,6 +7,7 @@ import Container from "@material-ui/core/Container";
 // import Editor from "@monaco-editor/react";
 import codes from "./codes";
 import IDE from "./IDE";
+import "./style.css";
 
 // const MAX_HEIGHT = 600;
 // const MIN_COUNT_OF_LINES = 9;
@@ -19,6 +20,24 @@ import IDE from "./IDE";
 // });
 
 const LiveIDE = () => {
+    useEffect(() => {
+        const navLi = document.querySelectorAll("nav ul li a");
+        const sections = document.querySelectorAll("div.sec");
+
+        window.addEventListener("scroll", () => {
+            let current = "";
+            sections.forEach((div) => {
+                let sectionTop = div.offsetTop;
+                if (scrollY >= sectionTop - 65) {
+                    current = div.getAttribute("id");
+                }
+            });
+            navLi.forEach((li) => {
+                li.classList.remove("active");
+                document.querySelector(`nav ul li a[href*=${current}]`).classList.add("active");
+            });
+        });
+    }, []);
     // const [height, setHeight] = useState(180);
     // const valueGetter = useRef();
 
@@ -62,13 +81,31 @@ const LiveIDE = () => {
     console.log(`http://${window.location.host}`);
 
     return (
-        <Fragment>
-            <Container>
-                {codes.map((item, i) => (
-                    <IDE item={item} key={i} />
-                ))}
-            </Container>
-        </Fragment>
+        <div className="box">
+            <div className="content">
+                <main>
+                    {codes.map((item, i) => (
+                        <div className="sec" id={`ide-${item.filename}`} key={i}>
+                            <h4>{item.title}</h4>
+                            <IDE item={item} />
+                        </div>
+                    ))}
+                </main>
+            </div>
+            <div className="scroll">
+                <nav>
+                    <ul>
+                        {codes.map((item, i) => (
+                            <li key={i}>
+                                <a href={`#ide-${item.filename}`} className={i === 0 ? "active" : ""}>
+                                    {item.title}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
+            </div>
+        </div>
     );
 };
 

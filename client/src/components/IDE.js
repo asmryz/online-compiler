@@ -53,7 +53,9 @@ const IDE = ({ item }) => {
     //console.log(`height >> ${item.code.split("\n").length * 2 * 10}`);
     return (
         <Paper>
-            <button onClick={showValue}>compile</button>
+            <button type="button" onClick={showValue}>
+                compile
+            </button>
             <Editor
                 //height={item.code.split("\n").length * 2 * 10 < 300 ? item.code.split("\n").length * 2 * 10 : 300}
                 height={300}
