@@ -66,6 +66,7 @@ app.post("/save", (req, res) => {
 });
 
 //docker run -itd --rm --name c-compiler gcc /bin/bash
+//docker run --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp openjdk:11 javac HelloWorld.java && java HelloWorld
 app.post("/terminals", async function (req, res) {
     args = [
         "run",
@@ -117,6 +118,6 @@ app.post("/terminals/:pid/size", function (req, res) {
     res.end();
 });
 
-app.listen(3000, function () {
-    console.log("Server started on :3000");
+app.listen(4283, function () {
+    console.log("Server started on :4283");
 });
