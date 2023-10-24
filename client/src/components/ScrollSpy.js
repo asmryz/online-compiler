@@ -9,9 +9,11 @@ const ScrollSpy = () => {
         window.addEventListener("scroll", () => {
             let current = "";
             sections.forEach((div) => {
+                console.log(div)
                 let sectionTop = div.offsetTop;
-                if (scrollY >= sectionTop - 65) {
+                if (screenY >= sectionTop - 65) {
                     current = div.getAttribute("id");
+                    console.log(current)
                 }
             });
             navLi.forEach((li) => {

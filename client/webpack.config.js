@@ -57,6 +57,8 @@ module.exports = {
         new MiniCssExtractPlugin(),
     ],
     devServer: {
+        host: '0.0.0.0',
+        useLocalIp: true,
         hot: true,
     },
 };

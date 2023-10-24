@@ -40,8 +40,9 @@ const IDE = ({ item }) => {
         axios
             .post("/save", {
                 src: editorRef.current.getValue(),
-                extention: item.extention,
+                extension: item.extension,
                 filename: item.filename,
+                _id: item._id
             })
             .then((res) => {
                 if (res.data === "saved") {
@@ -61,7 +62,7 @@ const IDE = ({ item }) => {
                 height={300}
                 onMount={handleEditorDidMount}
                 language={item.language}
-                value={item.code}
+                value={item.src}
                 scrollBeyondLastLine="false"
                 options={{
                     readOnly: false,

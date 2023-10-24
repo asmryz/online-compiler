@@ -11,9 +11,12 @@ const app = express();
 var expressWs = require("express-ws")(app);
 app.use(express.static(path.join(__dirname, "client", "dist")));
 app.use(express.json());
+const db = require('./models');
+
 
 var terminals = {};
 var args = [];
+app.use('/api/', require('./api/'))
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -52,15 +55,14 @@ expressWs.app.ws("/terminals/:pid", function (ws, req) {
     });
 });
 
-app.post("/save", (req, res) => {
-    //console.log(`first`);
+app.post("/save", async (req, res) => {
     //console.log(req.body);
-    const outputPath = "/home/asmryz/git/C/";
-    const { src, extention, filename } = req.body;
+    let result = await db.Code.findByIdAndUpdate({ _id: req.body._id }, { $set:{ src: req.body.src } }, {new: true})
+    const outputPath = "/home/asim/git/C/";
+    const { src, extension, filename } = req.body;
     // code that generates names and content
 
-    const currentFile = `${outputPath}${filename}${extention}`;
-    //const content = "...";
+    const currentFile = `${outputPath}${filename}${extension}`;
     fs.promises.writeFile(currentFile, src, "utf8");
     res.send("saved");
 });
@@ -73,7 +75,7 @@ app.post("/terminals", async function (req, res) {
         "--rm",
         "-it",
         "-v",
-        "/home/asmryz/git/C:/usr/src/myapp",
+        "/home/asim/git/C:/usr/src/myapp",
         "-w",
         "/usr/src/myapp",
         "gcc:4.9",
@@ -82,6 +84,7 @@ app.post("/terminals", async function (req, res) {
         //`gcc -o second second.c && ./second`,
         `gcc -o ${req.query.src} ${req.query.src}.c && ./${req.query.src}`,
     ];
+    console.log(`docker ${args.join(' ')}`)
     var cols = parseInt(req.query.cols);
     var rows = parseInt(req.query.rows);
 
