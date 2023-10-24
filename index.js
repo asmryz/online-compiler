@@ -70,20 +70,10 @@ app.post("/save", async (req, res) => {
 //docker run -itd --rm --name c-compiler gcc /bin/bash
 //docker run --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp openjdk:11 javac HelloWorld.java && java HelloWorld
 app.post("/terminals", async function (req, res) {
-    args = [
-        "run",
-        "--rm",
-        "-it",
-        "-v",
-        "/home/asim/git/C:/usr/src/myapp",
-        "-w",
-        "/usr/src/myapp",
-        "gcc:4.9",
-        "bash",
-        "-c",
-        //`gcc -o second second.c && ./second`,
-        `gcc -o ${req.query.src} ${req.query.src}.c && ./${req.query.src}`,
-    ];
+
+    args = [ "run", "--rm", "-it", "-v", "/home/asim/git/C:/usr/src/myapp", "-w", "/usr/src/myapp", "gcc:4.9", "bash", "-c",
+        `gcc -o ${req.query.src} ${req.query.src}.c && ./${req.query.src}`];
+        
     console.log(`docker ${args.join(' ')}`)
     var cols = parseInt(req.query.cols);
     var rows = parseInt(req.query.rows);
