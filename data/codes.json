@@ -1,0 +1,42 @@
+[
+    {
+        "title": "Hello World",
+        "filename": "src-1",
+        "extension": ".c",
+        "language": "c",
+        "src": "// Header file for input output functions\n#include <stdio.h>\n\n// main function -\n// where the execution of program begins\nint main()\n{\n    // prints hello world\n    printf(\"Hello World Asim Riaz\\n\");\n\n    return 0;\n}",
+        "__v": 0
+    },
+    {
+        "title": "Number Input",
+        "filename": "src-2",
+        "extension": ".c",
+        "language": "c",
+        "src": "// Header file for input output functions\n#include <stdio.h>\n\n// main function -\n// where the execution of program begins\nint main()\n{\n    int a;\n    printf(\"Enter any number for a: \");\n    scanf(\"%d\", &a);\n    // prints hello world\n    printf(\"This is second %d\\n\", a);\n\n    return 0;\n}",
+        "__v": 0
+    },
+    {
+        "title": "For Loop",
+        "filename": "src-3",
+        "extension": ".c",
+        "language": "c",
+        "src": "#include <stdio.h>\n\nint main()\n{\n    int sum=0, i;\n    for(i=1;i<=5;i++)\n    {\n        sum=sum+i;\n    }\n    \n    printf(\"SUM = %d\" , sum);\n    \n    return 0;\n}",
+        "__v": 0
+    },
+    {
+        "title": "While Loop",
+        "filename": "src-4",
+        "extension": ".c",
+        "language": "c",
+        "src": "// Example:\n\n#include<stdio.h>\n        \nint main()\n{\n    int no=1, sum=0;\n\n    while(no<=5)\n    {\n        sum=sum+no;\n        no++;\n    }\n        \n    printf(\"SUM = %d\" , sum);\n\n    return 0;\n}\n        ",
+        "__v": 0
+    },
+    {
+        "title": "Open IDE",
+        "filename": "src-5",
+        "extension": ".c",
+        "language": "c",
+        "src": "// This program can be used to convert a number to words\r\n\r\n#include <stdio.h>\r\n#include <string.h>\r\nvoid convert(int num)\r\n{\r\n    char *units[] = {\"one\", \"two\", \"three\", \"four\", \"five\", \"six\", \"seven\", \"eight\", \"nine\", \"\", \"eleven\", \"twelve\", \"thirteen\", \"fourteen\", \"fifteen\", \"sixteen\", \"seventeen\", \"eighteen\", \"nineteen\"};\r\n    char *tens[] = {\"ten\", \"twenty\", \"thirty\", \"forty\", \"fifty\", \"sixty\", \"seventy\", \"eighty\", \"ninety\"};\r\n    char *hundreds[] = {\"\", \"hundred and\", \"thousand\"};\r\n\r\n    /* single number*/\r\n    int n = 1;\r\n    int cnt = 0;\r\n    int index;\r\n\r\n    do{\r\n        n *= 10;\r\n        cnt++;\r\n    }while (n < num);\r\n\r\n    n /= 10;\r\n    cnt--;\r\n\r\n    while(cnt != -1){\r\n        index = num / n;\r\n        switch (cnt)\r\n        {\r\n        case 3:\r\n            printf(\"%s \", units[index - 1]);\r\n            printf(\"%s \", hundreds[cnt - 1]);\r\n            break;\r\n        \r\n        case 2:\r\n            printf(\"%s \", units[index - 1]);\r\n            printf(\"%s \", hundreds[cnt - 1]);            \r\n            break;\r\n\r\n        case 1:\r\n            printf(\"%s \", tens[index - 1]);\r\n            break;\r\n\r\n        case 0:\r\n            printf(\"%s \", units[index - 1]);\r\n            break;\r\n\r\n        default:\r\n            break;\r\n        }\r\n        num -= (n * index);\r\n        n /= 10;\r\n        cnt--;\r\n    }\r\n}\r\n\r\nint main(void)\r\n{\r\n    int a = 7632;\r\n    //printf(\"\\nEnter the number : \");\r\n    //scanf(\"%d\", &a);\r\n    convert(a);\r\n    return 0;\r\n}",
+        "__v": 0
+    }
+]
